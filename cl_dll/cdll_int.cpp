@@ -65,29 +65,29 @@ _HUD_GetStudioModelInterface ORIG_HUD_GetStudioModelInterface = nullptr;
 
 int HOOKED_HUD_VidInit(void)
 {
-    TRACE("Initializing visuals...\n");
-    gBXTHud.VidInit();
-    return ORIG_HUD_VidInit();
+	TRACE("Initializing visuals...\n");
+	gBXTHud.VidInit();
+	return ORIG_HUD_VidInit();
 }
 
 int HOOKED_HUD_Redraw(float time, int intermission)
 {
-    gBXTHud.Redraw(time, intermission);
-    return ORIG_HUD_Redraw(time, intermission);
+	gBXTHud.Redraw(time, intermission);
+	return ORIG_HUD_Redraw(time, intermission);
 }
 
 void CL_Initialize()
 {
-    int status;
+	int status;
 
-    hud_bordersize = g_lpEngfuncs->GetCvarPointer("hud_bordersize"); // TODO: use this for HUD padding
+	hud_bordersize = g_lpEngfuncs->GetCvarPointer("hud_bordersize"); // TODO: use this for HUD padding
 
-    Find(Client, V_CalcRefdef);
-    Find(Client, HUD_VidInit);
-    Find(Client, HUD_Redraw);
-    CreateHook(Client, V_CalcRefdef);
-    CreateHook(Client, HUD_VidInit);
-    CreateHook(Client, HUD_Redraw);
+	Find(Client, V_CalcRefdef);
+	Find(Client, HUD_VidInit);
+	Find(Client, HUD_Redraw);
+	CreateHook(Client, V_CalcRefdef);
+	CreateHook(Client, HUD_VidInit);
+	CreateHook(Client, HUD_Redraw);
 
 	TRACE("Initializing HUD...\n");
 	gBXTHud.Init();

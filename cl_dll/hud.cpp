@@ -13,8 +13,7 @@ static constexpr int ten_powers[] = {
 	1000000,
 	10000000,
 	100000000,
-	1000000000
-};
+	1000000000};
 
 // GetSpriteIndex()
 // searches through the sprite list loaded from hud.txt for a name matching SpriteName
@@ -129,7 +128,7 @@ void CBXTHud::VidInit(void)
 int CBXTHud::Redraw(float flTime, int intermission)
 {
 	g_lpEngfuncs->DrawConsoleString(2, 15, "Test!");
-	
+
 	for (CBXTHudBase* i : m_vecHudList)
 	{
 		i->Draw(flTime);
@@ -157,7 +156,7 @@ int CBXTHud::DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, 
 		}
 		else if (iFlags & (DHN_3DIGITS))
 		{
-			//SPR_DrawAdditive( 0, x, y, &rc );
+			// SPR_DrawAdditive( 0, x, y, &rc );
 			x += iWidth;
 		}
 
@@ -171,7 +170,7 @@ int CBXTHud::DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, 
 		}
 		else if (iFlags & (DHN_3DIGITS | DHN_2DIGITS))
 		{
-			//SPR_DrawAdditive( 0, x, y, &rc );
+			// SPR_DrawAdditive( 0, x, y, &rc );
 			x += iWidth;
 		}
 
@@ -188,13 +187,13 @@ int CBXTHud::DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, 
 		// SPR_Draw 100's
 		if (iFlags & (DHN_3DIGITS))
 		{
-			//SPR_DrawAdditive( 0, x, y, &rc );
+			// SPR_DrawAdditive( 0, x, y, &rc );
 			x += iWidth;
 		}
 
 		if (iFlags & (DHN_3DIGITS | DHN_2DIGITS))
 		{
-			//SPR_DrawAdditive( 0, x, y, &rc );
+			// SPR_DrawAdditive( 0, x, y, &rc );
 			x += iWidth;
 		}
 

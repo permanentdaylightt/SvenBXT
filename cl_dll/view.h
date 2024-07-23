@@ -1,6 +1,6 @@
 #ifdef VIEW_H_RECURSE_GUARD
 #error Recursive header files inclusion detected in view.h
-#else //VIEW_H_RECURSE_GUARD
+#else // VIEW_H_RECURSE_GUARD
 
 #define VIEW_H_RECURSE_GUARD
 
@@ -17,7 +17,7 @@ void HOOKED_V_CalcRefdef(struct ref_params_s* pparams);
 #error C++ compiler required to compile view.h
 #endif //__cplusplus
 
-#endif //VIEW_H_GUARD
+#endif // VIEW_H_GUARD
 
 #undef VIEW_H_RECURSE_GUARD
-#endif //VIEW_H_RECURSE_GUARD
+#endif // VIEW_H_RECURSE_GUARD

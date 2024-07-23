@@ -1,6 +1,6 @@
 #ifdef CDLL_INT_H_RECURSE_GUARD
 #error Recursive header files inclusion detected in cdll_int.h
-#else //CDLL_INT_H_RECURSE_GUARD
+#else // CDLL_INT_H_RECURSE_GUARD
 
 #define CDLL_INT_H_RECURSE_GUARD
 
@@ -121,7 +121,7 @@ extern _HUD_GetStudioModelInterface ORIG_HUD_GetStudioModelInterface;
 #error C++ compiler required to compile cdll_int.h
 #endif //__cplusplus
 
-#endif //CDLL_INT_H_GUARD
+#endif // CDLL_INT_H_GUARD
 
 #undef CDLL_INT_H_RECURSE_GUARD
-#endif //CDLL_INT_H_RECURSE_GUARD
+#endif // CDLL_INT_H_RECURSE_GUARD

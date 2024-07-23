@@ -1,6 +1,6 @@
 #ifdef UTILS_H_RECURSE_GUARD
 #error Recursive header files inclusion detected in Utils.h
-#else //UTILS_H_RECURSE_GUARD
+#else // UTILS_H_RECURSE_GUARD
 
 #define UTILS_H_RECURSE_GUARD
 
@@ -20,7 +20,7 @@ using farproc_t = void*;
 #define DLL_FORMAT ".so"
 #endif
 
-#define TRACE( format, ... )   Sys_Printf( "%s::%s(%d): " format, __FILE__, __FUNCTION__,  __LINE__)
+#define TRACE(format, ...) Sys_Printf("%s::%s(%d): " format, __FILE__, __FUNCTION__, __LINE__)
 
 void Sys_Printf(const char* fmt, ...);
 dllhandle_t Sys_GetModuleHandle(const char* pszModuleName);
@@ -30,7 +30,7 @@ farproc_t Sys_GetProcAddress(dllhandle_t handle, const char* name);
 #error C++ compiler required to compile Utils.h
 #endif //__cplusplus
 
-#endif //UTILS_H_GUARD
+#endif // UTILS_H_GUARD
 
 #undef UTILS_H_RECURSE_GUARD
-#endif //UTILS_H_RECURSE_GUARD
+#endif // UTILS_H_RECURSE_GUARD
