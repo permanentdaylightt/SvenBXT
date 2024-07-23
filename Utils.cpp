@@ -25,13 +25,15 @@ Sys_GetModuleHandle
 */
 dllhandle_t Sys_GetModuleHandle(const char *pszModuleName)
 {
-#ifdef WIN32
+#ifdef PLATFORM_WINDOWS
     return GetModuleHandleA(pszModuleName);
 #else
     void *handle = dlopen(pszModuleName, RTLD_LAZY | RTLD_NOLOAD);
     if (handle == NULL)
     {
-        Sys_Printf("dlopen error: %s\n", dlerror());
+        if (dlerror() && dlerror()[0])
+            Sys_Printf("dlopen error: %s\n", dlerror());
+
         return NULL;
     }
 
@@ -44,9 +46,9 @@ dllhandle_t Sys_GetModuleHandle(const char *pszModuleName)
 Sys_GetProcAddress
 ================
 */
-void* Sys_GetProcAddress(dllhandle_t handle, const char* name)
+farproc_t Sys_GetProcAddress(dllhandle_t handle, const char* name)
 {
-#ifdef WIN32
+#ifdef PLATFORM_WINDOWS
     return GetProcAddress( handle, name );
 #else
     return dlsym(handle, name);

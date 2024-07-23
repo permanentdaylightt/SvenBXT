@@ -1,2 +1,6 @@
 .idea/
+.vs/
 _build/
+_build_WIN32/
+build/
+

@@ -17,6 +17,7 @@ const double M_PI = 3.14159265358979323846;
 #define FCVAR_UNLOGGED        (1<<8)  // If this is a FCVAR_SERVER, don't log changes to the log file / console if we are creating a log
 #define FCVAR_NOEXTRAWHITEPACE    (1<<9)  // strip trailing/leading white space from this cvar
 /* CVAR FLAGS - END */
+
 #define vec3_t Vector
 typedef float vec_t;				// needed before including progdefs.h
 
@@ -2888,7 +2889,7 @@ struct efx_api_s
 // ********************************************************
 // Functions exported by the engine
 // ********************************************************
-
+// from SvenMod
 typedef struct cl_enginefuncs_s
 {
 	// sprite handlers
