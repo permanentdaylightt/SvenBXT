@@ -29,7 +29,7 @@ int CHudSpeedometer::Draw(float time)
 	else if (hud_speedometer_height->value)
 		y = hud_speedometer_height->value;
 
-	gBXTHud.DrawHudNumberCentered(x, y, std::round(std::hypot(g_RefParams.simvel[0], g_RefParams.simvel[1])), 100, 130, 200);
+	gBXTHud.DrawHudNumberCentered(x, y, std::round(std::hypot(g_RefParams.simvel[0], g_RefParams.simvel[1])), SVEN_HUD_COLOR);
 
 	return 0;
 }

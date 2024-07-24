@@ -19,6 +19,8 @@
 
 #define MAX_SPRITE_NAME_LENGTH 24
 
+#define SVEN_HUD_COLOR 100, 130, 200
+
 // ScreenHeight returns the height of the screen, in pixels
 #define ScreenHeight (gBXTHud.m_scrinfo.iHeight)
 // ScreenWidth returns the width of the screen, in pixels
