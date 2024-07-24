@@ -127,11 +127,18 @@ void CBXTHud::VidInit(void)
 
 int CBXTHud::Redraw(float flTime, int intermission)
 {
-	g_lpEngfuncs->DrawConsoleString(2, 15, "Test!");
-
 	for (CBXTHudBase* i : m_vecHudList)
 	{
-		i->Draw(flTime);
+		if (!intermission)
+		{
+			if (i->m_iFlags & HUD_ACTIVE)
+				i->Draw(flTime);
+		}
+		else
+		{ // it's an intermission,  so only draw hud elements that are set to draw during intermissions
+			if (i->m_iFlags & HUD_INTERMISSION)
+				i->Draw(flTime);
+		}
 	}
 
 	return 1;
