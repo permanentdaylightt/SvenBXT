@@ -25,6 +25,8 @@
 #define ScreenHeight (gBXTHud.m_scrinfo.iHeight)
 // ScreenWidth returns the width of the screen, in pixels
 #define ScreenWidth (gBXTHud.m_scrinfo.iWidth)
+// CharHeight returns the height of the char, in pixels
+#define CharHeight (gBXTHud.m_scrinfo.iCharHeight)
 
 
 //
@@ -60,6 +62,7 @@ private:
 
 public:
 	int GetSpriteIndex(const char* SpriteName);
+	void GetPosition(cvar_t* offset, cvar_t* anchor, int* x, int* y, int rx, int ry);
 
 	void Init(void);
 	void VidInit(void);
@@ -70,6 +73,7 @@ public:
 	int DrawHudNumberCentered(int x, int y, int number, int r, int g, int b);
 	int DrawHudNumberString(int xpos, int ypos, int iMinX, int iNumber, int r, int g, int b);
 	int DrawHudNumberStringFixed(int xpos, int ypos, int iNumber, int r, int g, int b);
+	int DrawMultilineString(int x, int y, std::string s);
 
 	HSPRITE_HL GetSprite(int index)
 	{
@@ -94,6 +98,7 @@ public:
 	int m_iRes;
 	int m_HUD_number_0;
 	int m_iFontHeight;
+	cvar_t* hud_precision;
 };
 
 extern CBXTHud gBXTHud;

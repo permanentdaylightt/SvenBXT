@@ -1,8 +1,12 @@
 #include "SvenBXT.h"
 
+#undef max
+#undef min
+
 CBXTHud gBXTHud;
 
-// from OpenAG
+// some code is from HL SDK, OpenAG, BunnymodXT
+
 static constexpr int ten_powers[] = {
 	1,
 	10,
@@ -31,9 +35,35 @@ int CBXTHud::GetSpriteIndex(const char* SpriteName)
 	return -1; // invalid sprite
 }
 
+void CBXTHud::GetPosition(cvar_t* offset, cvar_t* anchor, int* x, int* y, int rx = 0, int ry = 0)
+{
+	std::istringstream iss;
+
+	if (offset && offset->string[0])
+	{
+		iss.str(offset->string);
+		iss >> rx >> ry;
+		iss.str(std::string());
+		iss.clear();
+	}
+
+	iss.str(anchor->string);
+	float w = 0, h = 0;
+	iss >> w >> h;
+
+	rx += static_cast<int>(w * ScreenWidth);
+	ry += static_cast<int>(h * ScreenHeight);
+
+	if (x) *x = rx;
+	if (y) *y = ry;
+}
+
 void CBXTHud::Init(void)
 {
+	hud_precision = CVAR_CREATE("sbxt_hud_precision", "6", 0);
+
 	RegisterHUDElement<CHudSpeedometer>();
+	RegisterHUDElement<CHudViewangles>();
 
 	for (CBXTHudBase* i : m_vecHudList)
 	{
@@ -145,7 +175,6 @@ int CBXTHud::Redraw(float flTime, int intermission)
 }
 
 // should be in hud_redraw.cpp
-
 int CBXTHud::DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, int b)
 {
 	int iWidth = GetSpriteRect(m_HUD_number_0).right - GetSpriteRect(m_HUD_number_0).left;
@@ -238,4 +267,25 @@ int CBXTHud::DrawHudNumberCentered(int x, int y, int number, int r, int g, int b
 	size_t digit_count = count_digits(number);
 
 	return DrawHudNumber(x - (digit_width * digit_count) / 2, y, number, r, g, b);
+}
+
+int CBXTHud::DrawMultilineString(int x, int y, std::string s)
+{
+	int max_new_x = 0;
+
+	while (s.size() > 0)
+	{
+		size_t pos = s.find('\n');
+
+		int new_x = g_lpEngfuncs->DrawConsoleString(x, y, const_cast<char*>(s.substr(0, pos).c_str()));
+		max_new_x = std::max(new_x, max_new_x);
+		y += CharHeight;
+
+		if (pos != std::string::npos)
+			s = s.substr(pos + 1, std::string::npos);
+		else
+			s.erase();
+	};
+
+	return max_new_x;
 }
