@@ -19,6 +19,8 @@ add_library(SvenBXT SHARED
         cl_dll/hud.h
         cl_dll/hud_speedometer.cpp
         cl_dll/hud_speedometer.h
+        cl_dll/hud_viewangles.cpp
+        cl_dll/hud_viewangles.h
         cl_dll/view.cpp
         cl_dll/view.h
         SvenBXT.cpp
