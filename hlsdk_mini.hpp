@@ -2933,8 +2933,7 @@ struct efx_api_s
 typedef struct cl_enginefuncs_s
 {
 	// sprite handlers
-	HSPRITE_HL (*SPR_Load)
-	(const char* szPicName);
+	HSPRITE_HL (*SPR_Load)(const char* szPicName);
 	int (*SPR_Frames)(HSPRITE_HL hPic);
 	int (*SPR_Height)(HSPRITE_HL hPic, int frame);
 	int (*SPR_Width)(HSPRITE_HL hPic, int frame);

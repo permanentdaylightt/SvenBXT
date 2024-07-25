@@ -64,6 +64,7 @@ void CBXTHud::Init(void)
 
 	RegisterHUDElement<CHudSpeedometer>();
 	RegisterHUDElement<CHudViewangles>();
+	RegisterHUDElement<CHudOrigin>();
 
 	for (CBXTHudBase* i : m_vecHudList)
 	{

@@ -57,6 +57,7 @@ extern cl_enginefunc_t* g_lpEngfuncs;
 // HUD
 #include "cl_dll/hud_speedometer.h"
 #include "cl_dll/hud_viewangles.h"
+#include "cl_dll/hud_origin.h"
 
 #define Find(lib, func_name)                                                                                  \
 	if ((ORIG_##func_name = reinterpret_cast<_##func_name>(Sys_GetProcAddress(g_lp##lib, "" #func_name "")))) \
