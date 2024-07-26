@@ -3,4 +3,9 @@
 _build/
 _build_WIN32/
 build/
+src/.idea/
+src/.vs/
+src/_build/
+src/_build_WIN32/
+src/build/
 
