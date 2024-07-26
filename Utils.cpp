@@ -11,11 +11,21 @@ Sys_Printf
 */
 void Sys_Printf(const char* fmt, ...)
 {
-	va_list argptr;
+	char msg[4096];
+	va_list va;
 
-	va_start(argptr, fmt);
-	vprintf(fmt, argptr);
-	va_end(argptr);
+	va_start(va, fmt);
+	vsnprintf(msg, sizeof(msg), fmt, va);
+	va_end(va);
+
+	FILE* file = fopen("svenbxt.log", "a");
+	if (file)
+	{
+		fprintf(file, "%s", msg);
+		fclose(file);
+	}
+
+	printf("%s", msg);
 }
 
 /*

@@ -12,7 +12,15 @@ include(InputFilesList)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
+if (COMPILER_MSVC)
+    set(WINDOWS_FILES
+        iface.cpp
+        metahook_emulation.cpp
+        svenmod_emulation.cpp)
+endif()
+
 add_library(SvenBXT SHARED
+        ${WINDOWS_FILES}
         cl_dll/cdll_int.cpp
         cl_dll/cdll_int.h
         cl_dll/hud.cpp

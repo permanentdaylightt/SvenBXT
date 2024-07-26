@@ -10,6 +10,10 @@
 
 #ifdef __cplusplus
 
+// GLOBAL DEFINE
+#define SVENBXT_VERSION __DATE__ // maybe something else? :thinking:
+#define SVENBXT_GITHUB_URL "https://github.com/ScriptedSnark/SvenBXT"
+
 // WINDOWS
 #ifdef PLATFORM_WINDOWS
 #include <windows.h>
@@ -34,6 +38,8 @@
 #include "external/funchook/include/funchook.h"
 
 #ifdef PLATFORM_WINDOWS
+#include "iface.hpp"
+
 #include "external/SPTLib/Utils.hpp"
 #include "engine_patterns.hpp"
 extern Utils utils;

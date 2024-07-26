@@ -15,6 +15,8 @@ dllhandle_t g_lpClient;
 
 cl_enginefunc_t* g_lpEngfuncs;
 
+bool g_bHasLoaded = false;
+
 void SvenBXT_HookClient();
 
 void SvenBXT_FindEngineStuff()
@@ -134,6 +136,7 @@ lbl_waitFor:
 	if (g_lpClient)
 	{
 		SvenBXT_HookEngine();
+		g_bHasLoaded = true;
 		// SvenBXT_HookClient();
 	}
 	else
@@ -143,6 +146,17 @@ lbl_waitFor:
 
 void SvenBXT_Main()
 {
+	if (g_bHasLoaded)
+	{
+		Sys_Printf("Loader/injector or whatever else tried to initialize SvenBXT again!");
+		return;
+	}
+
+	// too lazy to do this using fopen
+	std::ofstream ofs;
+	ofs.open("svenbxt.log", std::ofstream::out | std::ofstream::trunc);
+	ofs.close();
+
 	TRACE("Initializing SvenBXT...\n");
 
 	std::thread t(WaitUntilClientLoads);
@@ -155,6 +169,8 @@ void SvenBXT_Shutdown()
 
 	SvenBXT_UnhookEngine();
 	SvenBXT_UnhookClient();
+
+	g_bHasLoaded = false;
 }
 
 #ifdef WIN32
@@ -178,7 +194,6 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 	return TRUE;
 }
 #else
-
 static __attribute__((constructor)) void Construct()
 {
 	SvenBXT_Main();
