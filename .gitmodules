@@ -1,3 +1,6 @@
 [submodule "funchook"]
-	path = external/funchook
+	path = src/external/funchook
+	url = https://github.com/kubo/funchook.git
+[submodule "src/external/funchook"]
+	path = src/external/funchook
 	url = https://github.com/kubo/funchook.git
