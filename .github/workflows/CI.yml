@@ -1,0 +1,99 @@
+name: CI
+
+on: 
+  push:
+  pull_request:
+  workflow_dispatch:
+
+  # Run GitHub Actions monthly to make sure CI isn't broken
+  schedule:
+    - cron: '0 0 1 * *'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      # Set fail-fast to false to ensure that feedback is delivered for all matrix combinations. Consider changing this to true when your workflow is stable.
+      fail-fast: false
+
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        build_type: [Release]
+        c_compiler: [gcc, cl]
+        include:
+          - os: windows-latest
+            c_compiler: cl
+            cpp_compiler: cl
+            artifact: "svenbxt_windows-cl"
+            bin-path: "src/build/Release/SvenBXT.dll"
+            toolchain-file: ""
+            cmake-generator: "Visual Studio 17 2022"
+            build-target: "-A Win32" # HACK, but I have no idea how to do it
+          - os: ubuntu-latest
+            c_compiler: gcc
+            cpp_compiler: g++
+            artifact: "svenbxt_ubuntu-gcc"
+            bin-path: "src/build/libSvenBXT.so"
+            toolchain-file: "cmake/ToolchainLinuxGCC.cmake"
+            cmake-generator: "Unix Makefiles"
+            build-target: ""
+        exclude:
+          - os: windows-latest
+            c_compiler: gcc
+          - os: ubuntu-latest
+            c_compiler: cl
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Checkout submodules
+      shell: bash
+      run: git submodule update --init --recursive
+
+    - name: Set reusable strings
+      # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
+      id: strings
+      shell: bash
+      run: |
+        echo "build-output-dir=${{ github.workspace }}/src/build" >> "$GITHUB_OUTPUT"
+        echo "src-dir=${{ github.workspace }}/src" >> "$GITHUB_OUTPUT"
+
+    - name: Add MSBuild to PATH
+      if: runner.os == 'Windows'
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Install Ubuntu packages
+      if: runner.os == 'Linux'
+      run: |
+          sudo dpkg --add-architecture i386
+          sudo apt update || true
+          sudo apt install -y libc6:i386 gcc-11-multilib g++-11-multilib
+
+    - name: Configure CMake
+      run: >
+        cmake -G "${{ matrix.cmake-generator }}"
+        ${{ matrix.build-target }}
+        -B ${{ steps.strings.outputs.build-output-dir }}
+        -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
+        -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        -DCMAKE_TOOLCHAIN_FILE=${{ matrix.toolchain-file }}
+        -S ${{ steps.strings.outputs.src-dir }}
+
+    - name: Build (Linux)
+      if: runner.os == 'Linux'
+      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
+
+    - name: Build (Windows)
+      if: runner.os == 'Windows'
+      run: msbuild /m /p:OutputPath=${{ steps.strings.outputs.build-output-dir }} /p:Configuration=${{ matrix.build_type }} ${{ steps.strings.outputs.build-output-dir }}/SvenBXT.sln
+
+    - name: Prepare artifacts
+      run: mkdir -p bin && mv ${{ matrix.bin-path }} bin/
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        path: ./bin
+        name: ${{ matrix.artifact }}
