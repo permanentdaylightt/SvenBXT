@@ -29,10 +29,16 @@ add_library(SvenBXT SHARED
         cl_dll/hud_origin.h
         cl_dll/hud_speedometer.cpp
         cl_dll/hud_speedometer.h
+        cl_dll/hud_timer.cpp
+        cl_dll/hud_timer.h
         cl_dll/hud_viewangles.cpp
         cl_dll/hud_viewangles.h
+        cl_dll/parsemsg.cpp
+        cl_dll/parsemsg.h
         cl_dll/view.cpp
         cl_dll/view.h
+        dlls/server.cpp
+        dlls/server.h
         SvenBXT.cpp
         SvenBXT.h
         Utils.cpp
@@ -67,6 +73,15 @@ elseif( COMPILER_MSVC )
             _CRT_SECURE_NO_WARNINGS
             _SCL_SECURE_NO_WARNINGS
     )
+endif()
+
+if (COMPILER_GNU)
+set_target_properties(SvenBXT PROPERTIES
+        C_VISIBILITY_PRESET hidden
+        CXX_VISIBILITY_PRESET hidden
+        COMPILE_FLAGS "${COMPILE_FLAGS} -fvisibility=hidden"
+        LINKER_FLAGS "${LINKER_FLAGS} -fvisibility=hidden"
+)
 endif()
 
 target_compile_definitions( SvenBXT PUBLIC

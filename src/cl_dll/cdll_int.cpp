@@ -67,6 +67,7 @@ int HOOKED_HUD_VidInit(void)
 {
 	TRACE("Initializing visuals...\n");
 	gBXTHud.VidInit();
+
 	return ORIG_HUD_VidInit();
 }
 

@@ -6,36 +6,93 @@
 
 #ifdef PLATFORM_WINDOWS
 Utils utils = Utils::Utils(NULL, NULL, NULL);
+Utils sv_utils = Utils::Utils(NULL, NULL, NULL);
 #endif
 
+funchook_t* g_lpFuncHook_Server;
+funchook_t* g_lpFuncHook_Engine;
 funchook_t* g_lpFuncHook_Client;
 
 dllhandle_t g_lpEngine;
+dllhandle_t g_lpServer;
 dllhandle_t g_lpClient;
 
 cl_enginefunc_t* g_lpEngfuncs;
+enginefuncs_t* g_engfuncs;
+globalvars_t* gpGlobals;
+server_t* sv;
 
 bool g_bHasLoaded = false;
 
 void SvenBXT_HookClient();
 
+// TODO: move to separate file
+typedef void (*_SCR_BeginLoadingPlaque)(qboolean reconnect);
+typedef void (*_SCR_EndLoadingPlaque)();
+_SCR_BeginLoadingPlaque ORIG_SCR_BeginLoadingPlaque = NULL;
+_SCR_EndLoadingPlaque ORIG_SCR_EndLoadingPlaque = NULL;
+
+void HOOKED_SCR_BeginLoadingPlaque(qboolean reconnect)
+{
+	ORIG_SCR_BeginLoadingPlaque(reconnect);
+
+	if (g_lpHUDTimer->IsInILMode())
+		g_lpHUDTimer->TimerStop();
+}
+
+void HOOKED_SCR_EndLoadingPlaque()
+{
+	ORIG_SCR_EndLoadingPlaque();
+
+	if (g_lpHUDTimer->IsInILMode() && g_RTATimer.GetMilliseconds() <= 0)
+		g_lpHUDTimer->TimerStart();
+}
+
 void SvenBXT_FindEngineStuff()
 {
 	TRACE("Finding engine stuff...\n");
 
+	g_lpFuncHook_Engine = funchook_create();
+
+	int status;
 #ifdef PLATFORM_LINUX
 	g_lpEngfuncs = (cl_enginefunc_t*)Sys_GetProcAddress(g_lpEngine, "cl_enginefuncs");
 
 	if (!g_lpEngfuncs)
 	{
-		Sys_Printf("[hw dll] Failed to get \"cl_enginefuncs\".\n");
+		Sys_Printf("[hw so] Failed to get \"cl_enginefuncs\".\n");
 		return;
 	}
 	else
 	{
-		Sys_Printf("[hw dll] Found cl_enginefuncs at %p.\n", g_lpEngfuncs);
+		Sys_Printf("[hw so] Found cl_enginefuncs at %p.\n", g_lpEngfuncs);
 		SvenBXT_HookClient();
 	}
+
+	// TODO: use GET_VARIABLE define
+	enginefuncs_t** p_engfuncs = (enginefuncs_t**)Sys_GetProcAddress(g_lpEngine, "g_pengfuncsExportedToDlls");
+	g_engfuncs = (*p_engfuncs);
+	gpGlobals = (globalvars_t*)Sys_GetProcAddress(g_lpEngine, "gGlobalVariables");
+	sv = (server_t*)Sys_GetProcAddress(g_lpEngine, "sv");
+
+	if (!gpGlobals)
+	{
+		Sys_Printf("[hw so] Failed to get \"gGlobalVariables\".\n");
+	}
+
+	if (!g_engfuncs)
+	{
+		Sys_Printf("[hw so] Failed to get \"g_engfuncsExportedToDlls\".\n[hw dll] Sharing time to clients is not available.\n");
+	}
+
+	if (!sv)
+	{
+		Sys_Printf("[hw so] Failed to get \"sv\".\n");
+	}
+
+	GET_VARIABLE(Engine, ORIG_LoadThisDll, _Z11LoadThisDllPc);
+	GET_VARIABLE(Engine, ORIG_SCR_BeginLoadingPlaque, _Z22SCR_BeginLoadingPlaquei);
+	GET_VARIABLE(Engine, ORIG_SCR_EndLoadingPlaque, _Z20SCR_EndLoadingPlaquev);
 #else
 	void* handle;
 	static void* base;
@@ -70,7 +127,86 @@ void SvenBXT_FindEngineStuff()
 				break;
 			}
 		});
+
+	void* LoadThisDll;
+	auto fLoadThisDll = utils.FindAsync(
+		LoadThisDll,
+		patterns::engine::LoadThisDll,
+		[&](auto pattern)
+		{
+			switch (pattern - patterns::engine::LoadThisDll.cbegin())
+			{
+			default:
+			case 0: // Sven-5.25
+				Sys_Printf("Searching g_engfuncs in Sven-5.25 pattern...\n");
+				enginefuncs_t** p_engfuncs = *reinterpret_cast<enginefuncs_t***>(reinterpret_cast<uintptr_t>(LoadThisDll) + 109);
+				g_engfuncs = (*p_engfuncs);
+				gpGlobals = *reinterpret_cast<globalvars_t**>(reinterpret_cast<uintptr_t>(LoadThisDll) + 67);
+
+				if (g_engfuncs)
+					Sys_Printf("[hw dll] Found g_engfuncs at 0x%p.\n", g_engfuncs);
+
+				if (gpGlobals)
+					Sys_Printf("[hw dll] Found gpGlobals at 0x%p.\n", gpGlobals);
+				break;
+			}
+		});
+
+	void* Host_ClearMemory;
+	auto fHost_ClearMemory = utils.FindAsync(
+		Host_ClearMemory,
+		patterns::engine::Host_ClearMemory,
+		[&](auto pattern)
+		{
+			switch (pattern - patterns::engine::Host_ClearMemory.cbegin())
+			{
+			default:
+			case 0: // HL-9920
+				Sys_Printf("Searching sv in HL-9920 pattern...\n");
+				sv = *reinterpret_cast<server_t**>(reinterpret_cast<uintptr_t>(Host_ClearMemory) + 0xA4);
+
+				if (sv)
+				{
+					Sys_Printf("[hw dll] Found sv at 0x%p.\n", sv);
+				}
+				break;
+			case 1: // HL-8684
+				Sys_Printf("Searching sv in HL-8684 pattern...\n");
+				sv = *reinterpret_cast<server_t**>(reinterpret_cast<uintptr_t>(Host_ClearMemory) + 0x5E);
+				if (sv)
+				{
+					Sys_Printf("[hw dll] Found sv at 0x%p.\n", sv);
+				}
+				break;
+			case 2: // HL-4554
+				Sys_Printf("Searching sv in HL-4554 pattern...\n");
+				sv = *reinterpret_cast<server_t**>(reinterpret_cast<uintptr_t>(Host_ClearMemory) + 0x5C);
+				if (sv)
+				{
+					Sys_Printf("[hw dll] Found sv at 0x%p.\n", sv);
+				}
+				break;
+			case 3: // Sven-5.25
+				Sys_Printf("Searching sv in Sven-5.25 pattern...\n");
+				sv = *reinterpret_cast<server_t**>(reinterpret_cast<uintptr_t>(Host_ClearMemory) + 0x98);
+				if (sv)
+				{
+					Sys_Printf("[hw dll] Found sv at 0x%p.\n", sv);
+				}
+				break;
+			}
+		});
+
+	SPTEngineFind(LoadThisDll);
+	SPTEngineFind(SCR_BeginLoadingPlaque);
+	SPTEngineFind(SCR_EndLoadingPlaque);
 #endif
+
+	CreateHook(Engine, LoadThisDll);
+	CreateHook(Engine, SCR_BeginLoadingPlaque);
+	CreateHook(Engine, SCR_EndLoadingPlaque);
+
+	funchook_install(g_lpFuncHook_Engine, 0);
 }
 
 void SvenBXT_HookClient()
@@ -119,6 +255,11 @@ void SvenBXT_UnhookClient()
 
 void SvenBXT_UnhookEngine()
 {
+	if (g_lpFuncHook_Engine)
+	{
+		funchook_uninstall(g_lpFuncHook_Engine, 0);
+		funchook_destroy(g_lpFuncHook_Engine);
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -137,7 +278,6 @@ lbl_waitFor:
 	{
 		SvenBXT_HookEngine();
 		g_bHasLoaded = true;
-		// SvenBXT_HookClient();
 	}
 	else
 		goto lbl_waitFor;

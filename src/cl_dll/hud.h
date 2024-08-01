@@ -28,6 +28,8 @@
 // CharHeight returns the height of the char, in pixels
 #define CharHeight (gBXTHud.m_scrinfo.iCharHeight)
 
+#define NumberWidth (gBXTHud.GetSpriteRect(gBXTHud.m_HUD_number_0).right - gBXTHud.GetSpriteRect(gBXTHud.m_HUD_number_0).left)
+#define NumberHeight (gBXTHud.GetSpriteRect(gBXTHud.m_HUD_number_0).bottom - gBXTHud.GetSpriteRect(gBXTHud.m_HUD_number_0).top)
 
 //
 //-----------------------------------------------------
@@ -74,7 +76,16 @@ public:
 	int DrawHudNumberString(int xpos, int ypos, int iMinX, int iNumber, int r, int g, int b);
 	int DrawHudNumberStringFixed(int xpos, int ypos, int iNumber, int r, int g, int b);
 	int DrawMultilineString(int x, int y, std::string s);
-
+	int DrawNumberTimer(int number, int x, int y, int fieldMinWidth);
+	int DrawBitmap(int x, int y, const int bitmap[], int width, int height, int r, int g, int b);
+	void DrawDot(int x, int y, int r, int g, int b);
+	void DrawLine(int x, int y, int length, int r, int g, int b);
+	int DrawNumberXT(int number, int x, int y, int r, int g, int b, int fieldMinWidth);
+	int DrawNumberTimer(int number, int x, int y, int r, int g, int b, int fieldMinWidth);
+	void DrawDecimalSeparator(int x, int y, int r, int g, int b);
+	void DrawDecimalSeparator(int x, int y);
+	void DrawColon(int x, int y, int r, int g, int b);
+	void DrawColon(int x, int y);
 	HSPRITE_HL GetSprite(int index)
 	{
 		return (index < 0) ? 0 : m_rghSprites[index];

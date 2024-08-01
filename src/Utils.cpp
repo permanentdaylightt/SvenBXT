@@ -6,6 +6,19 @@
 
 /*
 ================
+UTIL_IsHost
+================
+*/
+bool UTIL_IsHost()
+{
+	if (!sv)
+		return false;
+
+	return sv->active;
+}
+
+/*
+================
 Sys_Printf
 ================
 */

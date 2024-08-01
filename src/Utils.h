@@ -22,6 +22,8 @@ using farproc_t = void*;
 
 #define TRACE(format, ...) Sys_Printf("%s::%s(%d): " format, __FILE__, __FUNCTION__, __LINE__)
 
+bool UTIL_IsHost();
+
 void Sys_Printf(const char* fmt, ...);
 dllhandle_t Sys_GetModuleHandle(const char* pszModuleName);
 farproc_t Sys_GetProcAddress(dllhandle_t handle, const char* name);
