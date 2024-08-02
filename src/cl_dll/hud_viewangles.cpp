@@ -16,7 +16,7 @@ float AngleNormalize(float angle)
 
 int CHudViewangles::Init()
 {
-	m_iFlags = HUD_ACTIVE;
+	m_iFlags |= HUD_ACTIVE;
 
 	hud_viewangles = CVAR_CREATE("sbxt_hud_viewangles", "0", 0);
 	hud_viewangles_anchor = CVAR_CREATE("sbxt_hud_viewangles_anchor", "1 0", 0);

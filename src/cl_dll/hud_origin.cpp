@@ -2,7 +2,7 @@
 
 int CHudOrigin::Init()
 {
-	m_iFlags = HUD_ACTIVE;
+	m_iFlags |= HUD_ACTIVE;
 
 	hud_origin = CVAR_CREATE("sbxt_hud_origin", "0", 0);
 	hud_origin_anchor = CVAR_CREATE("sbxt_hud_origin_anchor", "1 0", 0);

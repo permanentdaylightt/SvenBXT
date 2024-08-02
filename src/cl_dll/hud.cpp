@@ -182,7 +182,7 @@ int CBXTHud::Redraw(float flTime, int intermission)
 	for (CBXTHudBase* i : m_vecHudList)
 	{
 		if (i->m_iFlags & HUD_ALWAYSRENDER)
-			return 1; // see CBXTHud::RedrawAlwaysVisibleElements
+			continue; // see CBXTHud::RedrawAlwaysVisibleElements
 
 		if (!intermission)
 		{

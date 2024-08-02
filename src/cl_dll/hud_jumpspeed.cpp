@@ -5,7 +5,7 @@ CHudJumpspeed* g_lpJumpspeedHUD;
 int CHudJumpspeed::Init()
 {
 	g_lpJumpspeedHUD = this;
-	m_iFlags = HUD_ACTIVE;
+	m_iFlags |= HUD_ACTIVE;
 
 	hud_jumpspeed = CVAR_CREATE("sbxt_hud_jumpspeed", "0", 0);
 	hud_jumpspeed_below_cross = CVAR_CREATE("sbxt_hud_jumpspeed_below_cross", "0", 0);

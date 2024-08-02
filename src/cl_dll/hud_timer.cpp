@@ -57,7 +57,7 @@ int __MsgFunc_BXTTimer(const char* pszName, int iSize, void* pbuf)
 int CHudTimer::Init()
 {
 	g_lpHUDTimer = this;
-	m_iFlags = HUD_ALWAYSRENDER;
+	m_iFlags |= HUD_ALWAYSRENDER;
 
 	hud_timer_serversync = CVAR_CREATE("sbxt_timer_serversync", "1", 0);
 	hud_timer_il_mode = CVAR_CREATE("sbxt_timer_il_mode", "0", 0);
