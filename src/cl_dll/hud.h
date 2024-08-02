@@ -175,6 +175,25 @@ static inline float YRES(float y)
 #define SetCrosshair (*g_lpEngfuncs->SetCrosshair)
 #define AngleVectors (*g_lpEngfuncs->AngleVectors)
 
+#define VectorSubtract(a, b, c)   \
+	{                             \
+		(c)[0] = (a)[0] - (b)[0]; \
+		(c)[1] = (a)[1] - (b)[1]; \
+		(c)[2] = (a)[2] - (b)[2]; \
+	}
+#define VectorAdd(a, b, c)        \
+	{                             \
+		(c)[0] = (a)[0] + (b)[0]; \
+		(c)[1] = (a)[1] + (b)[1]; \
+		(c)[2] = (a)[2] + (b)[2]; \
+	}
+#define VectorCopy(a, b) \
+	{                    \
+		(b)[0] = (a)[0]; \
+		(b)[1] = (a)[1]; \
+		(b)[2] = (a)[2]; \
+	}
+
 
 // Gets the height & width of a sprite,  at the specified frame
 inline int SPR_Height(HSPRITE_HL x, int f) { return g_lpEngfuncs->SPR_Height(x, f); }

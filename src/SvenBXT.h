@@ -78,6 +78,7 @@ extern server_t* sv;
 #include "cl_dll/hud_viewangles.h"
 #include "cl_dll/hud_origin.h"
 #include "cl_dll/hud_timer.h"
+#include "cl_dll/hud_jumpspeed.h"
 
 #ifdef PLATFORM_WINDOWS
 #define FASTCALL __fastcall

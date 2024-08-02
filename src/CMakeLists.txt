@@ -24,6 +24,8 @@ set(CLIENT_FILES
     cl_dll/cdll_int.h
     cl_dll/hud.cpp
     cl_dll/hud.h
+    cl_dll/hud_jumpspeed.cpp
+    cl_dll/hud_jumpspeed.h
     cl_dll/hud_origin.cpp
     cl_dll/hud_origin.h
     cl_dll/hud_speedometer.cpp
