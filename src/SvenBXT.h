@@ -70,6 +70,8 @@ extern server_t* sv;
 #include "cl_dll/parsemsg.h"
 #include "cl_dll/view.h"
 
+#include "engine/gl_screen.h"
+
 #include "dlls/enginecallback.h"
 #include "dlls/server.h"
 

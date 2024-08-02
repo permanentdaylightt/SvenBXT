@@ -43,6 +43,10 @@ set(SERVER_FILES
     dlls/server.cpp
     dlls/server.h)
 
+set(ENGINE_FILES
+    engine/gl_screen.cpp
+    engine/gl_screen.h)
+
 set(MAIN_FILES
     SvenBXT.cpp
     SvenBXT.h
@@ -52,12 +56,14 @@ set(MAIN_FILES
 
 source_group("cl_dll" FILES ${CLIENT_FILES})
 source_group("dlls" FILES ${SERVER_FILES})
+source_group("engine" FILES ${ENGINE_FILES})
 source_group("" FILES ${MAIN_FILES} ${WINDOWS_FILES})
 
 add_library(SvenBXT SHARED
     ${WINDOWS_FILES}
     ${CLIENT_FILES}
     ${SERVER_FILES}
+    ${ENGINE_FILES}
     ${MAIN_FILES})
 
 add_subdirectory("external")
