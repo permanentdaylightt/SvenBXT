@@ -270,7 +270,6 @@ lbl_waitFor:
 		goto lbl_waitFor;
 }
 
-
 void SvenBXT_Main()
 {
 	if (g_bHasLoaded)
@@ -306,10 +305,12 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 	switch (fdwReason)
 	{
 	case DLL_PROCESS_ATTACH:
+#ifdef _DEBUG
 		AllocConsole();
 		FILE *in, *out;
 		freopen_s(&in, "conin$", "r", stdin);
 		freopen_s(&out, "conout$", "w+", stdout);
+#endif
 		CreateThread(NULL, NULL, reinterpret_cast<LPTHREAD_START_ROUTINE>(SvenBXT_Main), NULL, NULL, NULL);
 		break;
 
