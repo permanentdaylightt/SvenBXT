@@ -156,12 +156,34 @@ void CBXTHud::VidInit(void)
 	{
 		i->VidInit();
 	}
+
+	m_bInitializedHUD = true;
+}
+
+int CBXTHud::RedrawAlwaysVisibleElements(float flTime)
+{
+	if (!m_bInitializedHUD)
+		return 1;
+
+	for (CBXTHudBase* i : m_vecHudList)
+	{
+		if (i->m_iFlags & HUD_ALWAYSRENDER)
+			i->Draw(flTime);
+	}
+
+	return 1;
 }
 
 int CBXTHud::Redraw(float flTime, int intermission)
 {
+	if (!m_bInitializedHUD)
+		return 1;
+
 	for (CBXTHudBase* i : m_vecHudList)
 	{
+		if (i->m_iFlags & HUD_ALWAYSRENDER)
+			return 1; // see CBXTHud::RedrawAlwaysVisibleElements
+
 		if (!intermission)
 		{
 			if (i->m_iFlags & HUD_ACTIVE)

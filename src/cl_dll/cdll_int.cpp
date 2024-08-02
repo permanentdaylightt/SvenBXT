@@ -74,6 +74,7 @@ int HOOKED_HUD_VidInit(void)
 int HOOKED_HUD_Redraw(float time, int intermission)
 {
 	gBXTHud.Redraw(time, intermission);
+
 	return ORIG_HUD_Redraw(time, intermission);
 }
 
@@ -89,7 +90,7 @@ void CL_Initialize()
 	CreateHook(Client, V_CalcRefdef);
 	CreateHook(Client, HUD_VidInit);
 	CreateHook(Client, HUD_Redraw);
-
+	
 	TRACE("Initializing HUD...\n");
 	gBXTHud.Init();
 }

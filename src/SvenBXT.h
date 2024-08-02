@@ -113,6 +113,8 @@ extern server_t* sv;
 		{                                                                                                                   \
 			Sys_Printf("[hw dll] Found " #future_name " at %p (using the %s pattern).\n", ORIG_##future_name, pattern->name()); \
 		}                                                                                                                   \
+		else                                                                                                                    \
+			Sys_Printf("[hw dll] Could not find " #future_name ".\n");															\
 	}
 
 #define SPTServerFind(future_name)                                                                                              \

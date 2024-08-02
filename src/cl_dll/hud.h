@@ -14,8 +14,9 @@
 #define DHN_2DIGITS 2
 #define DHN_3DIGITS 4
 
-#define HUD_ACTIVE 1
-#define HUD_INTERMISSION 2
+#define HUD_ACTIVE (1 << 0)	
+#define HUD_INTERMISSION (1 << 1) 
+#define HUD_ALWAYSRENDER (1 << 2)
 
 #define MAX_SPRITE_NAME_LENGTH 24
 
@@ -48,6 +49,7 @@ public:
 class CBXTHud
 {
 private:
+	bool m_bInitializedHUD;
 	std::vector<CBXTHudBase*> m_vecHudList;
 
 	HSPRITE_HL m_hsprLogo;
@@ -69,6 +71,7 @@ public:
 	void Init(void);
 	void VidInit(void);
 	void Think(void);
+	int RedrawAlwaysVisibleElements(float flTime);
 	int Redraw(float flTime, int intermission);
 	int DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, int b);
 	int DrawHudNumber(int x, int y, int number, int r, int g, int b);

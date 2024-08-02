@@ -12,12 +12,19 @@
 
 typedef void (*_SCR_BeginLoadingPlaque)(qboolean reconnect);
 typedef void (*_SCR_EndLoadingPlaque)();
+typedef void (*_GL_Begin2D)();
+typedef void (*_GL_Finish2D)();
+typedef void (*_GL_EndRendering)();
 
 extern _SCR_BeginLoadingPlaque ORIG_SCR_BeginLoadingPlaque;
 extern _SCR_EndLoadingPlaque ORIG_SCR_EndLoadingPlaque;
+extern _GL_Begin2D ORIG_GL_Begin2D;
+extern _GL_Finish2D ORIG_GL_Finish2D;
+extern _GL_EndRendering ORIG_GL_EndRendering;
 
 void HOOKED_SCR_BeginLoadingPlaque(qboolean reconnect);
 void HOOKED_SCR_EndLoadingPlaque();
+void HOOKED_GL_EndRendering();
 
 #else //!__cplusplus
 #error C++ compiler required to compile gl_screen.h

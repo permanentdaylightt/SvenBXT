@@ -68,9 +68,13 @@ void SvenBXT_FindEngineStuff()
 		Sys_Printf("[hw so] Failed to get \"sv\".\n");
 	}
 
+	GET_VARIABLE(Engine, ORIG_GL_Begin2D, _Z10GL_Begin2Dv);
+	GET_VARIABLE(Engine, ORIG_GL_Finish2D, _Z11GL_Finish2Dv);
+
 	GET_VARIABLE(Engine, ORIG_LoadThisDll, _Z11LoadThisDllPc);
 	GET_VARIABLE(Engine, ORIG_SCR_BeginLoadingPlaque, _Z22SCR_BeginLoadingPlaquei);
 	GET_VARIABLE(Engine, ORIG_SCR_EndLoadingPlaque, _Z20SCR_EndLoadingPlaquev);
+	GET_VARIABLE(Engine, ORIG_GL_EndRendering, _Z15GL_EndRenderingv);
 #else
 	void* handle;
 	static void* base;
@@ -175,14 +179,19 @@ void SvenBXT_FindEngineStuff()
 			}
 		});
 
+	SPTEngineFind(GL_Begin2D);
+	SPTEngineFind(GL_Finish2D);
+
 	SPTEngineFind(LoadThisDll);
 	SPTEngineFind(SCR_BeginLoadingPlaque);
 	SPTEngineFind(SCR_EndLoadingPlaque);
+	SPTEngineFind(GL_EndRendering);
 #endif
 
 	CreateHook(Engine, LoadThisDll);
 	CreateHook(Engine, SCR_BeginLoadingPlaque);
 	CreateHook(Engine, SCR_EndLoadingPlaque);
+	CreateHook(Engine, GL_EndRendering);
 
 	funchook_install(g_lpFuncHook_Engine, 0);
 }
