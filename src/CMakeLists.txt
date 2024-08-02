@@ -19,34 +19,46 @@ if (COMPILER_MSVC)
         svenmod_emulation.cpp)
 endif()
 
+set(CLIENT_FILES
+    cl_dll/cdll_int.cpp
+    cl_dll/cdll_int.h
+    cl_dll/hud.cpp
+    cl_dll/hud.h
+    cl_dll/hud_origin.cpp
+    cl_dll/hud_origin.h
+    cl_dll/hud_speedometer.cpp
+    cl_dll/hud_speedometer.h
+    cl_dll/hud_timer.cpp
+    cl_dll/hud_timer.h
+    cl_dll/hud_viewangles.cpp
+    cl_dll/hud_viewangles.h
+    cl_dll/parsemsg.cpp
+    cl_dll/parsemsg.h
+    cl_dll/view.cpp
+    cl_dll/view.h)
+
+set(SERVER_FILES
+    dlls/server.cpp
+    dlls/server.h)
+
+set(MAIN_FILES
+    SvenBXT.cpp
+    SvenBXT.h
+    Utils.cpp
+    Utils.h
+    hlsdk_mini.hpp)
+
+source_group("cl_dll" FILES ${CLIENT_FILES})
+source_group("dlls" FILES ${SERVER_FILES})
+source_group("" FILES ${MAIN_FILES} ${WINDOWS_FILES})
+
 add_library(SvenBXT SHARED
-        ${WINDOWS_FILES}
-        cl_dll/cdll_int.cpp
-        cl_dll/cdll_int.h
-        cl_dll/hud.cpp
-        cl_dll/hud.h
-        cl_dll/hud_origin.cpp
-        cl_dll/hud_origin.h
-        cl_dll/hud_speedometer.cpp
-        cl_dll/hud_speedometer.h
-        cl_dll/hud_timer.cpp
-        cl_dll/hud_timer.h
-        cl_dll/hud_viewangles.cpp
-        cl_dll/hud_viewangles.h
-        cl_dll/parsemsg.cpp
-        cl_dll/parsemsg.h
-        cl_dll/view.cpp
-        cl_dll/view.h
-        dlls/server.cpp
-        dlls/server.h
-        SvenBXT.cpp
-        SvenBXT.h
-        Utils.cpp
-        Utils.h
-        hlsdk_mini.hpp)
+    ${WINDOWS_FILES}
+    ${CLIENT_FILES}
+    ${SERVER_FILES}
+    ${MAIN_FILES})
 
 add_subdirectory("external")
-#add_subdirectory("engine")
 
 # Preprocessor definitions
 set( COMMON_DEFINES "" )				# Preprocessor definitions for all targets
