@@ -4,7 +4,7 @@ int CHudSpeedometer::Init()
 {
 	m_iFlags = HUD_ACTIVE;
 
-	hud_speedometer = CVAR_CREATE("sbxt_hud_speedometer", "0", 0);
+	hud_speedometer = CVAR_CREATE("sbxt_hud_speedometer", "1", 0);
 	hud_speedometer_below_cross = CVAR_CREATE("sbxt_hud_speedometer_below_cross", "0", 0);
 	hud_speedometer_height = CVAR_CREATE("sbxt_hud_speedometer_height", "0", 0);
 
