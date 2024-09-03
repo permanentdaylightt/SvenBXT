@@ -36,7 +36,7 @@
 #include <thread>
 
 // GL
-#include <GL/GL.h>
+#include <GL/gl.h>
 
 #include "external/funchook/include/funchook.h"
 
