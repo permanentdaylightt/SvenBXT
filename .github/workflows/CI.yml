@@ -36,7 +36,7 @@ jobs:
             toolchain-file: ""
             cmake-generator: "Visual Studio 17 2022"
             build-target: "-A Win32" # HACK, but I have no idea how to do it
-          - os: ubuntu-latest
+          - os: ubuntu-20.04
             c_compiler: gcc
             cpp_compiler: g++
             artifact: "svenbxt_ubuntu-gcc"
@@ -47,7 +47,7 @@ jobs:
         exclude:
           - os: windows-latest
             c_compiler: gcc
-          - os: ubuntu-latest
+          - os: ubuntu-20.04
             c_compiler: cl
 
     steps:
