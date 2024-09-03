@@ -67,6 +67,7 @@ void CBXTHud::Init(void)
 	RegisterHUDElement<CHudOrigin>();
 	RegisterHUDElement<CHudTimer>();
 	RegisterHUDElement<CHudJumpspeed>();
+	RegisterHUDElement<CHudCrosshair>();
 
 	for (CBXTHudBase* i : m_vecHudList)
 	{

@@ -35,6 +35,9 @@
 #include <fstream>
 #include <thread>
 
+// GL
+#include <GL/GL.h>
+
 #include "external/funchook/include/funchook.h"
 
 #ifdef PLATFORM_WINDOWS
@@ -69,6 +72,7 @@ extern server_t* sv;
 #include "cl_dll/hud.h"
 #include "cl_dll/parsemsg.h"
 #include "cl_dll/view.h"
+#include "cl_dll/opengl_utils.hpp"
 
 #include "engine/gl_screen.h"
 
@@ -81,6 +85,7 @@ extern server_t* sv;
 #include "cl_dll/hud_origin.h"
 #include "cl_dll/hud_timer.h"
 #include "cl_dll/hud_jumpspeed.h"
+#include "cl_dll/hud_crosshair.h"
 
 #ifdef PLATFORM_WINDOWS
 #define FASTCALL __fastcall

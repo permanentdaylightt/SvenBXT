@@ -24,6 +24,8 @@ set(CLIENT_FILES
     cl_dll/cdll_int.h
     cl_dll/hud.cpp
     cl_dll/hud.h
+    cl_dll/hud_crosshair.cpp
+    cl_dll/hud_crosshair.h
     cl_dll/hud_jumpspeed.cpp
     cl_dll/hud_jumpspeed.h
     cl_dll/hud_origin.cpp
@@ -34,6 +36,8 @@ set(CLIENT_FILES
     cl_dll/hud_timer.h
     cl_dll/hud_viewangles.cpp
     cl_dll/hud_viewangles.h
+    cl_dll/opengl_utils.cpp
+    cl_dll/opengl_utils.hpp
     cl_dll/parsemsg.cpp
     cl_dll/parsemsg.h
     cl_dll/view.cpp
@@ -85,6 +89,8 @@ if( COMPILER_GNU )
             _vsnprintf=vsnprintf
             _snwprintf=swprintf
     )
+
+    set(OPENGL_LIBRARY GL)
 elseif( COMPILER_MSVC )
 
     # Disable "unsafe" warnings
@@ -93,6 +99,8 @@ elseif( COMPILER_MSVC )
             _CRT_SECURE_NO_WARNINGS
             _SCL_SECURE_NO_WARNINGS
     )
+
+    set(OPENGL_LIBRARY opengl32)
 endif()
 
 if (COMPILER_GNU)
@@ -114,9 +122,11 @@ set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 
 # Modules
 find_package(Threads REQUIRED)
+find_package(OpenGL REQUIRED)
 
 # Link with dependencies
 target_link_libraries(SvenBXT
         Threads::Threads
         funchook-static
+        ${OPENGL_LIBRARY}
 )
