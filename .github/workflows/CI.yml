@@ -74,7 +74,7 @@ jobs:
       run: |
           sudo dpkg --add-architecture i386
           sudo apt update || true
-          sudo apt install -y libc6:i386 gcc-11-multilib g++-11-multilib libmesa-dev:i386 mesa-common-dev:i386 libgl-dev:i386
+          sudo apt install -y libc6:i386 gcc-11-multilib g++-11-multilib mesa-common-dev libgl-dev:i386 libgl1-mesa-dev
 
     - name: Configure CMake
       run: >
