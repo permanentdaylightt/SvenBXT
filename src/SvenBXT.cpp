@@ -60,7 +60,7 @@ void SvenBXT_FindEngineStuff()
 
 	if (!g_engfuncs)
 	{
-		Sys_Printf("[hw so] Failed to get \"g_engfuncsExportedToDlls\".\n[hw dll] Sharing time to clients is not available.\n");
+		Sys_Printf("[hw so] Failed to get \"g_engfuncsExportedToDlls\".\n[Engine] Sharing time to clients is not available.\n");
 	}
 
 	if (!sv)
@@ -103,7 +103,17 @@ void SvenBXT_FindEngineStuff()
 
 				if (g_lpEngfuncs)
 				{
-					Sys_Printf("[hw dll] Found cl_enginefuncs at 0x%p.\n", g_lpEngfuncs);
+					Sys_Printf("[Engine] Found cl_enginefuncs at 0x%p.\n", g_lpEngfuncs);
+					SvenBXT_HookClient();
+				}
+				break;
+			case 1: // Sven-5.26-rc1
+				Sys_Printf("Searching cl_enginefuncs in Sven-5.26-rc1 pattern...\n");
+				g_lpEngfuncs = *reinterpret_cast<cl_enginefunc_t**>(reinterpret_cast<uintptr_t>(ClientDLL_Init) + 354);
+
+				if (g_lpEngfuncs)
+				{
+					Sys_Printf("[Engine] Found cl_enginefuncs at 0x%p.\n", g_lpEngfuncs);
 					SvenBXT_HookClient();
 				}
 				break;
@@ -126,10 +136,10 @@ void SvenBXT_FindEngineStuff()
 				gpGlobals = *reinterpret_cast<globalvars_t**>(reinterpret_cast<uintptr_t>(LoadThisDll) + 67);
 
 				if (g_engfuncs)
-					Sys_Printf("[hw dll] Found g_engfuncs at 0x%p.\n", g_engfuncs);
+					Sys_Printf("[Engine] Found g_engfuncs at 0x%p.\n", g_engfuncs);
 
 				if (gpGlobals)
-					Sys_Printf("[hw dll] Found gpGlobals at 0x%p.\n", gpGlobals);
+					Sys_Printf("[Engine] Found gpGlobals at 0x%p.\n", gpGlobals);
 				break;
 			}
 		});
@@ -143,37 +153,12 @@ void SvenBXT_FindEngineStuff()
 			switch (pattern - patterns::engine::Host_ClearMemory.cbegin())
 			{
 			default:
-			case 0: // HL-9920
-				Sys_Printf("Searching sv in HL-9920 pattern...\n");
-				sv = *reinterpret_cast<server_t**>(reinterpret_cast<uintptr_t>(Host_ClearMemory) + 0xA4);
-
-				if (sv)
-				{
-					Sys_Printf("[hw dll] Found sv at 0x%p.\n", sv);
-				}
-				break;
-			case 1: // HL-8684
-				Sys_Printf("Searching sv in HL-8684 pattern...\n");
-				sv = *reinterpret_cast<server_t**>(reinterpret_cast<uintptr_t>(Host_ClearMemory) + 0x5E);
-				if (sv)
-				{
-					Sys_Printf("[hw dll] Found sv at 0x%p.\n", sv);
-				}
-				break;
-			case 2: // HL-4554
-				Sys_Printf("Searching sv in HL-4554 pattern...\n");
-				sv = *reinterpret_cast<server_t**>(reinterpret_cast<uintptr_t>(Host_ClearMemory) + 0x5C);
-				if (sv)
-				{
-					Sys_Printf("[hw dll] Found sv at 0x%p.\n", sv);
-				}
-				break;
-			case 3: // Sven-5.25
+			case 0: // Sven-5.25
 				Sys_Printf("Searching sv in Sven-5.25 pattern...\n");
 				sv = *reinterpret_cast<server_t**>(reinterpret_cast<uintptr_t>(Host_ClearMemory) + 0x98);
 				if (sv)
 				{
-					Sys_Printf("[hw dll] Found sv at 0x%p.\n", sv);
+					Sys_Printf("[Engine] Found sv at 0x%p.\n", sv);
 				}
 				break;
 			}

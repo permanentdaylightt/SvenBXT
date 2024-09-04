@@ -116,10 +116,10 @@ extern server_t* sv;
 		auto pattern = f##future_name.get();                                                                                \
 		if (ORIG_##future_name)                                                                                             \
 		{                                                                                                                   \
-			Sys_Printf("[hw dll] Found " #future_name " at %p (using the %s pattern).\n", ORIG_##future_name, pattern->name()); \
+			Sys_Printf("[Engine] Found " #future_name " at %p (using the %s pattern).\n", ORIG_##future_name, pattern->name()); \
 		}                                                                                                                   \
 		else                                                                                                                    \
-			Sys_Printf("[hw dll] Could not find " #future_name ".\n");															\
+			Sys_Printf("[Engine] Could not find " #future_name ".\n");															\
 	}
 
 #define SPTServerFind(future_name)                                                                                              \
